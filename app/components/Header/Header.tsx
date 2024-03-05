@@ -11,7 +11,7 @@ export const SHeader = ({rightAction}: IProps) => {
   return (
     <SView>
       <ButtonWrapper onPress={rightAction}>
-        {/* <BackIcon /> */}
+        <BackIcon />
       </ButtonWrapper>
     </SView>
   );

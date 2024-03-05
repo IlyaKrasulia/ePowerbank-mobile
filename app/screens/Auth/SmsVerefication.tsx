@@ -14,7 +14,7 @@ import {Typography} from '../../components/Base/Typography';
 import {Colors} from '../../utils/styles';
 import {CustomButton} from '../../components/Button/CustomButton';
 import {useTimer} from '../../hooks/useTimer';
-import { SHeader } from '../../components/Header/Header';
+import {SHeader} from '../../components/Header/Header';
 
 const CELL_COUNT = 6;
 export const SmsVerification = ({route}: any) => {
@@ -39,8 +39,9 @@ export const SmsVerification = ({route}: any) => {
           <SView style={styles.container}>
             <SHeader rightAction={() => goBack()} />
             <SView style={styles.header}>
-              <Typography variant="p1">test</Typography>
-              <Typography variant="p1">test</Typography>
+              <Typography variant="p1SemiBold" textAlign="center">
+                Введіть код з SMS
+              </Typography>
             </SView>
             <SView style={styles.form}>
               <CodeField
@@ -99,7 +100,7 @@ export const SmsVerification = ({route}: any) => {
             </SView>
             <CustomButton
               disabled={code.length !== 6 || load}
-              text={'test'}
+              text={'Перейди до останнього кроку'}
               onPress={() => {}}
             />
           </SView>

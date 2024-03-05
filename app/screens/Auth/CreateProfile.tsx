@@ -6,9 +6,13 @@ import {Colors} from '../../utils/styles';
 import {Typography} from '../../components/Base/Typography';
 import {KeyboardAvoidingLayout} from '../../components/Base/KeyboardAvoidingLayout';
 import {SafeAreaView} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenEnum} from '../../utils/types';
 
 export const CreateProfile = () => {
   const [phone, setPhone] = useState('');
+  const {navigate} = useNavigation();
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingLayout>
@@ -22,7 +26,7 @@ export const CreateProfile = () => {
           <SView marginRight={15} marginLeft={15}>
             <CustomButton
               text="Продовжити"
-              onPress={() => {}}
+              onPress={() => navigate(ScreenEnum.SmsVerefication)}
               background={Colors.PRIMARY_BUTTON}
             />
           </SView>
