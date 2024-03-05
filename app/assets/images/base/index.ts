@@ -1,0 +1,10 @@
+// export {default as ArrowDown} from './arrow_down.svg';
+// export {default as Cross} from './cross.svg';
+// export {default as BellIcon} from './bell.svg';
+// export {default as ChatIcon} from './chat.svg';
+// export {default as PhoneIcon} from './phone.svg';
+// export {default as LinkIcon} from './link.svg';
+// export {default as LogoIcon} from './logo.svg';
+// export {default as PlusIcon} from './plus.svg';
+export {default as BackIcon} from './back.svg';
+// export {default as SmallArrowDown} from './small_arrow_down.svg';
