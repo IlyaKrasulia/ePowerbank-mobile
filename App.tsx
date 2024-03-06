@@ -6,7 +6,7 @@ import {ScreenEnum} from './app/utils/types';
 function App() {
   return (
     <NavigationContainer>
-      <AppNavigation initialRoute={ScreenEnum.SmsVerefication} />
+      <AppNavigation initialRoute={ScreenEnum.Home} />
     </NavigationContainer>
   );
 }

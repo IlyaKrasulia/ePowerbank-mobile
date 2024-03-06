@@ -7,6 +7,9 @@ import {FunnelStep3} from '../screens/Funnel/FunnelStep3';
 import {FunnelStep4} from '../screens/Funnel/FunnelStep4';
 import {CreateProfile} from '../screens/Auth/CreateProfile';
 import {SmsVerification} from '../screens/Auth/SmsVerefication';
+import {ChooseCity} from '../screens/Auth/ChooseCity';
+import {AddAdditionalInfo} from '../screens/Auth/AddAdditionalInfo';
+import {Home} from '../screens/Home';
 
 interface IProps {
   initialRoute?: ScreenEnum;
@@ -47,6 +50,21 @@ export const AppNavigation = ({initialRoute}: IProps) => {
       <Stack.Screen
         name={ScreenEnum.SmsVerefication}
         component={SmsVerification}
+        options={{gestureEnabled: false}}
+      />
+      <Stack.Screen
+        name={ScreenEnum.AddAdditionalInfo}
+        component={AddAdditionalInfo}
+        options={{gestureEnabled: false}}
+      />
+      <Stack.Screen
+        name={ScreenEnum.ChooseCity}
+        component={ChooseCity}
+        options={{gestureEnabled: false}}
+      />
+      <Stack.Screen
+        name={ScreenEnum.Home}
+        component={Home}
         options={{gestureEnabled: false}}
       />
     </Stack.Navigator>

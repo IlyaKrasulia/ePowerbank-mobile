@@ -15,9 +15,10 @@ import {Colors} from '../../utils/styles';
 import {CustomButton} from '../../components/Button/CustomButton';
 import {useTimer} from '../../hooks/useTimer';
 import {SHeader} from '../../components/Header/Header';
+import {ScreenEnum} from '../../utils/types';
 
 const CELL_COUNT = 6;
-export const SmsVerification = ({route}: any) => {
+export const SmsVerification = () => {
   const [code, setCode] = useState('');
   const ref = useBlurOnFulfill({value: code, cellCount: CELL_COUNT});
   const [codeProps, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -26,10 +27,9 @@ export const SmsVerification = ({route}: any) => {
   });
   const {second, startTimer} = useTimer();
   const {goBack, navigate} = useNavigation();
-  const [load, setLoad] = useState(false);
 
   const resendCode = async () => {
-    console.log('resend');
+    startTimer();
   };
 
   return (
@@ -99,9 +99,10 @@ export const SmsVerification = ({route}: any) => {
               </TouchableOpacity>
             </SView>
             <CustomButton
-              disabled={code.length !== 6 || load}
+              disabled={code.length !== 6}
               text={'Перейди до останнього кроку'}
-              onPress={() => {}}
+              onPress={() => navigate(ScreenEnum.AddAdditionalInfo)}
+              background={Colors.PRIMARY_BUTTON}
             />
           </SView>
         </KeyboardAvoidingLayout>

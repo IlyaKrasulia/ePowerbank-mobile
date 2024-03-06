@@ -5,6 +5,9 @@ export type StackParamList = {
   FunnelStep4: undefined;
   CreateProfile: undefined;
   SmsVerefication: undefined;
+  AddAdditionalInfo: undefined;
+  ChooseCity: undefined;
+  Home: undefined;
 };
 
 export enum ScreenEnum {
@@ -14,4 +17,14 @@ export enum ScreenEnum {
   FunnelStep4 = 'FunnelStep4',
   CreateProfile = 'CreateProfile',
   SmsVerefication = 'SmsVerefication',
+  AddAdditionalInfo = 'AddAdditionalInfo',
+  ChooseCity = 'ChooseCity',
+  Home = 'Home',
 }
+
+export type cityType = {
+  value: string;
+  label: string;
+  support: boolean;
+  occupied: boolean;
+};

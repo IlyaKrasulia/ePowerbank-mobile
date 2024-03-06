@@ -1,0 +1,136 @@
+import {cityType} from './types';
+
+export const CITIES: Array<cityType> = [
+  {
+    label: 'Івано-Франківськ',
+    value: 'IvanoFrankivsk',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Вінниця',
+    value: 'Vinnitsa',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Дніпро',
+    value: 'Dnipro',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Донецьк',
+    value: 'Donetsk',
+    occupied: true,
+    support: false,
+  },
+  {
+    label: 'Житомир',
+    value: 'Zhytomyr',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Запоріжжя',
+    value: 'Zaporizhzhia',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Київ',
+    value: 'Kiev',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Кропивницький',
+    value: 'Kropyvnytskyi',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Одеса',
+    value: 'Odesa',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Полтава',
+    value: 'Poltavs',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Рівне',
+    value: 'Rivne',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Сімферополь',
+    value: 'Simferopol',
+    occupied: true,
+    support: false,
+  },
+  {
+    label: 'Севастополь',
+    value: 'Sevastopol',
+    occupied: true,
+    support: false,
+  },
+  {
+    label: 'Суми',
+    value: 'Sumy',
+    occupied: false,
+    support: true,
+  },
+  {
+    label: 'Тернопіль',
+    value: 'Ternopol',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Ужгород',
+    value: 'Uzhhorod',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Харків',
+    value: 'Kharkiv',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Херсон',
+    value: 'Kherson',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Хмельницький',
+    value: 'Khmelnytskyi',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Черкаси',
+    value: 'Cherkasi',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Чернівці',
+    value: 'Chernivtsi',
+    occupied: false,
+    support: false,
+  },
+  {
+    label: 'Чернігів',
+    value: 'Chernihiv',
+    occupied: false,
+    support: false,
+  },
+];

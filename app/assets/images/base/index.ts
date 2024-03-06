@@ -7,4 +7,5 @@
 // export {default as LogoIcon} from './logo.svg';
 // export {default as PlusIcon} from './plus.svg';
 export {default as BackIcon} from './back.svg';
+export {default as CityIcon} from './city.svg';
 // export {default as SmallArrowDown} from './small_arrow_down.svg';

@@ -27,9 +27,7 @@ export const FunnelTemplate = ({
   const {navigate} = useNavigation();
 
   const goNext = () => {
-    if (index < 4) {
-      navigate(nextScreen);
-    }
+    navigate(nextScreen);
   };
 
   return (
