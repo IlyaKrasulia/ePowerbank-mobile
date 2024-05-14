@@ -8,11 +8,18 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {CITIES} from '../../utils/constants';
 import {CustomButton} from '../../components/Button/CustomButton';
 import {Colors} from '../../utils/styles';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../../redux/authSlice';
+import {firebase} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
-export const ChooseCity = () => {
+export const ChooseCity = ({route}) => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
   const [cities, setCities] = useState<Array<any>>([]);
+  const {userData} = route.params;
+
   useMemo(() => {
     const sortedData = CITIES.sort((a, b) => {
       if (a.support && !b.support) {
@@ -44,6 +51,20 @@ export const ChooseCity = () => {
 
     setCities(sortedFilteredData);
   }, [value]);
+
+  const handleSubmit = () => {
+    try {
+      firestore()
+        .collection('Users')
+        .doc(firebase.auth().currentUser?.uid)
+        .set(userData)
+        .then(() => {
+          dispatch(setUserData(userData));
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <AppLayout>
@@ -79,7 +100,7 @@ export const ChooseCity = () => {
       <View style={styles.buttonWrapper}>
         <CustomButton
           text="Почати!"
-          onPress={() => {}}
+          onPress={handleSubmit}
           background={Colors.PRIMARY_BUTTON}
         />
       </View>

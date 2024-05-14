@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SView} from '../../components/Base/SView';
 import {PhoneInput} from '../../components/Inputs/PhoneInput';
 import {CustomButton} from '../../components/Button/CustomButton';
@@ -8,10 +8,31 @@ import {KeyboardAvoidingLayout} from '../../components/Base/KeyboardAvoidingLayo
 import {SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenEnum} from '../../utils/types';
+import {firebase} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../../redux/authSlice';
 
 export const CreateProfile = () => {
+  const dispatch = useDispatch();
   const [phone, setPhone] = useState('');
   const {navigate} = useNavigation();
+
+  useEffect(() => {
+    if (firebase.auth().currentUser) {
+      const subsctibe = firestore()
+        .collection('Users')
+        .doc(firebase.auth().currentUser?.uid)
+        .onSnapshot(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            dispatch(setUserData(documentSnapshot.data()));
+          } else {
+            navigate(ScreenEnum.AddAdditionalInfo);
+          }
+        });
+      return () => subsctibe();
+    }
+  });
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -26,7 +47,7 @@ export const CreateProfile = () => {
           <SView marginRight={15} marginLeft={15}>
             <CustomButton
               text="Продовжити"
-              onPress={() => navigate(ScreenEnum.SmsVerefication)}
+              onPress={() => navigate(ScreenEnum.SmsVerefication, {phone})}
               background={Colors.PRIMARY_BUTTON}
             />
           </SView>

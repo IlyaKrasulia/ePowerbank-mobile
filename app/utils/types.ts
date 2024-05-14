@@ -4,7 +4,7 @@ export type StackParamList = {
   FunnelStep3: undefined;
   FunnelStep4: undefined;
   CreateProfile: undefined;
-  SmsVerefication: undefined;
+  SmsVerefication: {phone: string};
   AddAdditionalInfo: undefined;
   ChooseCity: undefined;
   Home: undefined;

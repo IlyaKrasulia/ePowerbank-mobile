@@ -11,6 +11,8 @@ interface IProps {
   error?: string;
   placeholder: string;
   maxLength?: number;
+  onBlur?: (e: any) => void;
+  keyboardType?: 'number-pad';
 }
 
 export const BaseInput = ({
@@ -20,6 +22,8 @@ export const BaseInput = ({
   error,
   placeholder,
   maxLength,
+  onBlur,
+  keyboardType,
 }: IProps) => {
   return (
     <View>
@@ -38,10 +42,12 @@ export const BaseInput = ({
         <TextInput
           value={defaultValue}
           onChangeText={onChange}
-          maxLength={maxLength ? maxLength : 15}
+          maxLength={maxLength}
           style={[styles.input, leftIcon && {paddingLeft: 50}]}
           placeholderTextColor={Colors.TEXT}
           placeholder={placeholder}
+          keyboardType={keyboardType}
+          onBlur={onBlur}
         />
       </View>
       {error && (
