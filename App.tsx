@@ -1,13 +1,13 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {AppNavigation} from './app/navigation/AppNavigation';
-import {ScreenEnum} from './app/utils/types';
+import {Provider} from 'react-redux';
+import {store} from './app/redux/store';
+import {NApp} from './app/navigation/NApp';
 
 function App() {
   return (
-    <NavigationContainer>
-      <AppNavigation initialRoute={ScreenEnum.Home} />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NApp />
+    </Provider>
   );
 }
 

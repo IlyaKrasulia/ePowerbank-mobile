@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {
   CodeField,
   Cursor,
@@ -16,9 +16,17 @@ import {CustomButton} from '../../components/Button/CustomButton';
 import {useTimer} from '../../hooks/useTimer';
 import {SHeader} from '../../components/Header/Header';
 import {ScreenEnum} from '../../utils/types';
+import auth, {FirebaseAuthTypes, firebase} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../../redux/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CELL_COUNT = 6;
-export const SmsVerification = () => {
+export const SmsVerification = ({route}) => {
+  const dispatch = useDispatch();
+  const [confirm, setConfirm] =
+    useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
   const [code, setCode] = useState('');
   const ref = useBlurOnFulfill({value: code, cellCount: CELL_COUNT});
   const [codeProps, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -27,10 +35,56 @@ export const SmsVerification = () => {
   });
   const {second, startTimer} = useTimer();
   const {goBack, navigate} = useNavigation();
+  const {phone} = route.params;
+
+  const fetchUser = () => {
+    try {
+      const currentUserUid = firebase.auth().currentUser?.uid;
+      if (currentUserUid) {
+        firestore()
+          .collection('Users')
+          .doc(currentUserUid)
+          .onSnapshot(documentSnapshot => {
+            if (documentSnapshot.exists) {
+              AsyncStorage.setItem(
+                'userData',
+                JSON.stringify(documentSnapshot.data()),
+              );
+              dispatch(setUserData(documentSnapshot.data()));
+            } else {
+              navigate(ScreenEnum.AddAdditionalInfo);
+            }
+          });
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   const resendCode = async () => {
     startTimer();
   };
+
+  async function signInWithPhoneNumber(phoneNumber: string) {
+    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    setConfirm(confirmation);
+  }
+
+  async function confirmCode() {
+    if (confirm) {
+      try {
+        await confirm.confirm(code).then(() => {
+          fetchUser();
+        });
+      } catch (error) {
+        Alert.alert('Invalid code.');
+      }
+    }
+  }
+
+  useEffect(() => {
+    signInWithPhoneNumber('+38' + phone);
+  }, [phone]);
 
   return (
     <>
@@ -100,8 +154,8 @@ export const SmsVerification = () => {
             </SView>
             <CustomButton
               disabled={code.length !== 6}
-              text={'Перейди до останнього кроку'}
-              onPress={() => navigate(ScreenEnum.AddAdditionalInfo)}
+              text={'Продовжити'}
+              onPress={confirmCode}
               background={Colors.PRIMARY_BUTTON}
             />
           </SView>

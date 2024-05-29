@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleProp, StyleSheet, Pressable, ViewStyle} from 'react-native';
 import {Colors} from '../../utils/styles';
 import {Typography} from '../Base/Typography';
+import { Loader } from '../Base/Loader';
 
 interface IProps {
   text: string;
@@ -41,8 +42,8 @@ export const CustomButton = ({
       style={({pressed}) => [
         type && styles.btn,
         {
-          backgroundColor: disabled || loading ? Colors.DARK : background,
-          opacity: pressed ? 0.7 : 1,
+          backgroundColor: disabled || loading ? background : background,
+          opacity: pressed || disabled ? 0.7 : 1,
           marginTop,
           marginBottom,
         },
@@ -51,7 +52,7 @@ export const CustomButton = ({
       disabled={(disabled && !pressInDisabled) || loading}
       onPress={onPress}>
       {loading ? (
-        <></>
+        <Loader color={Colors.BLACK} />
       ) : (
         <Typography variant="button" color={textColor}>
           {text}

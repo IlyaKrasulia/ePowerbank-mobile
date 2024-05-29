@@ -8,11 +8,19 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {CITIES} from '../../utils/constants';
 import {CustomButton} from '../../components/Button/CustomButton';
 import {Colors} from '../../utils/styles';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../../redux/authSlice';
+import {firebase} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import {CityIcon} from '../../assets/images/base';
 
-export const ChooseCity = () => {
+export const ChooseCity = ({route}) => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
   const [cities, setCities] = useState<Array<any>>([]);
+  const {userData} = route.params;
+
   useMemo(() => {
     const sortedData = CITIES.sort((a, b) => {
       if (a.support && !b.support) {
@@ -45,6 +53,29 @@ export const ChooseCity = () => {
     setCities(sortedFilteredData);
   }, [value]);
 
+  const handleSubmit = () => {
+    const data = {
+      name: userData.name,
+      lastname: userData.lastname,
+      email: userData.email,
+      birthday: `${userData.day}.${userData.mounth}.${userData.year}`,
+      uid: firebase.auth().currentUser?.uid,
+      emailVerificated: false,
+      city: selectedValue,
+    };
+    try {
+      firestore()
+        .collection('Users')
+        .doc(firebase.auth().currentUser?.uid)
+        .set(data)
+        .then(() => {
+          dispatch(setUserData(data));
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <AppLayout>
       <SView marginLeft={15} marginRight={15} marginTop={10} flex={1}>
@@ -56,7 +87,7 @@ export const ChooseCity = () => {
           onChange={text => setValue(text)}
           placeholder="Донецьк"
           maxLength={10}
-          leftIcon
+          leftIcon={<CityIcon height={20} width={20} />}
         />
         <SView marginTop={20} marginBottom={80}>
           <FlatList
@@ -79,7 +110,7 @@ export const ChooseCity = () => {
       <View style={styles.buttonWrapper}>
         <CustomButton
           text="Почати!"
-          onPress={() => {}}
+          onPress={handleSubmit}
           background={Colors.PRIMARY_BUTTON}
         />
       </View>

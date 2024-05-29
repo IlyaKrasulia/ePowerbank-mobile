@@ -26,7 +26,7 @@ export const CreateProfile = () => {
           <SView marginRight={15} marginLeft={15}>
             <CustomButton
               text="Продовжити"
-              onPress={() => navigate(ScreenEnum.SmsVerefication)}
+              onPress={() => navigate(ScreenEnum.SmsVerefication, {phone})}
               background={Colors.PRIMARY_BUTTON}
             />
           </SView>
