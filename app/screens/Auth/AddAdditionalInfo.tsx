@@ -12,7 +12,7 @@ import {firebase} from '@react-native-firebase/auth';
 
 export const AddAdditionalInfo = () => {
   const {navigate} = useNavigation();
-  console.log(firebase.auth().currentUser);
+
   return (
     <AppLayout>
       <Formik

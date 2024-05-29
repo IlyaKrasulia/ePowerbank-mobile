@@ -6,9 +6,17 @@ import {ProfileIcon, QrCodeIcon} from '../assets/images/base';
 import {Colors, screenWidth} from '../utils/styles';
 import {ButtonWrapper} from '../components/Button/ButtonWrapper';
 import {useNavigation} from '@react-navigation/native';
+import {ScreenEnum, StackParamList} from '../utils/types';
+import {RentCard} from '../components/Home/RentCard';
+import {useSelector} from 'react-redux';
+import {RootState} from '../redux/store';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 
 export const Home = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrawerNavigationProp<StackParamList>>();
+  const activeRent = useSelector(
+    (state: RootState) => state.auth.userData.activRent,
+  );
   return (
     <SView flex={1}>
       <Mapbox />
@@ -17,8 +25,15 @@ export const Home = () => {
         onPress={() => navigation.openDrawer()}>
         <ProfileIcon height={26} width={26} />
       </ButtonWrapper>
+      {activeRent?.id && (
+        <View style={styles.cardWrapper}>
+          <RentCard />
+        </View>
+      )}
       <View style={styles.scanQrWrapper}>
-        <ButtonWrapper style={styles.scanQrButton} onPress={() => {}}>
+        <ButtonWrapper
+          style={styles.scanQrButton}
+          onPress={() => navigation.navigate(ScreenEnum.ScanQr)}>
           <QrCodeIcon height={40} width={40} />
         </ButtonWrapper>
       </View>
@@ -52,5 +67,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: screenWidth,
+  },
+  cardWrapper: {
+    position: 'absolute',
+    bottom: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    width: '100%',
   },
 });

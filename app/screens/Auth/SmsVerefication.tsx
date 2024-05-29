@@ -20,6 +20,7 @@ import auth, {FirebaseAuthTypes, firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useDispatch} from 'react-redux';
 import {setUserData} from '../../redux/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CELL_COUNT = 6;
 export const SmsVerification = ({route}) => {
@@ -45,6 +46,10 @@ export const SmsVerification = ({route}) => {
           .doc(currentUserUid)
           .onSnapshot(documentSnapshot => {
             if (documentSnapshot.exists) {
+              AsyncStorage.setItem(
+                'userData',
+                JSON.stringify(documentSnapshot.data()),
+              );
               dispatch(setUserData(documentSnapshot.data()));
             } else {
               navigate(ScreenEnum.AddAdditionalInfo);

@@ -11,16 +11,21 @@ import {
   SettingsIcon,
 } from '../assets/images/base';
 import {ButtonWrapper} from './Button/ButtonWrapper';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenEnum} from '../utils/types';
 
 interface NavItemProps {
   text: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   balance?: number;
+  navigateTo: any;
 }
 
-const NavItem = ({text, icon, balance}: NavItemProps) => {
+const NavItem = ({text, icon, balance, navigateTo}: NavItemProps) => {
+  const {navigate} = useNavigation();
+
   return (
-    <ButtonWrapper onPress={() => {}}>
+    <ButtonWrapper onPress={() => navigate(navigateTo)}>
       <SView
         flexDirection="row"
         justifyContent="space-between"
@@ -62,20 +67,26 @@ export const CustomDrawer = () => {
             <NavItem
               balance={111}
               icon={<PaymentIcon width={20} height={20} />}
-              text="Payment"
+              text="Платіжні карти"
+              navigateTo={ScreenEnum.Balance}
             />
             <NavItem
               icon={<ClockIcon width={20} height={20} />}
-              text="History"
+              text="Історія"
             />
-            <NavItem icon={<PhoneIcon width={20} height={20} />} text="Help" />
+            <NavItem
+              icon={<PhoneIcon width={20} height={20} />}
+              text="Допомога"
+            />
             <NavItem
               icon={<ProfileWhiteIcon width={20} height={20} />}
-              text="Profile"
+              text="Профіль"
+              navigateTo={ScreenEnum.Profile}
             />
             <NavItem
               icon={<SettingsIcon width={20} height={20} />}
-              text="Settings"
+              text="Створити станцію"
+              navigateTo={ScreenEnum.CreateStation}
             />
           </SView>
         </View>

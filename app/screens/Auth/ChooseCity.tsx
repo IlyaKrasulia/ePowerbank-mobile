@@ -12,6 +12,7 @@ import {useDispatch} from 'react-redux';
 import {setUserData} from '../../redux/authSlice';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {CityIcon} from '../../assets/images/base';
 
 export const ChooseCity = ({route}) => {
   const dispatch = useDispatch();
@@ -53,13 +54,22 @@ export const ChooseCity = ({route}) => {
   }, [value]);
 
   const handleSubmit = () => {
+    const data = {
+      name: userData.name,
+      lastname: userData.lastname,
+      email: userData.email,
+      birthday: `${userData.day}.${userData.mounth}.${userData.year}`,
+      uid: firebase.auth().currentUser?.uid,
+      emailVerificated: false,
+      city: selectedValue,
+    };
     try {
       firestore()
         .collection('Users')
         .doc(firebase.auth().currentUser?.uid)
-        .set(userData)
+        .set(data)
         .then(() => {
-          dispatch(setUserData(userData));
+          dispatch(setUserData(data));
         });
     } catch (error) {
       console.log(error);
@@ -77,7 +87,7 @@ export const ChooseCity = ({route}) => {
           onChange={text => setValue(text)}
           placeholder="Донецьк"
           maxLength={10}
-          leftIcon
+          leftIcon={<CityIcon height={20} width={20} />}
         />
         <SView marginTop={20} marginBottom={80}>
           <FlatList
