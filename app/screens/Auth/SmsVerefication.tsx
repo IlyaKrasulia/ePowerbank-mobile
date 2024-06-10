@@ -1,6 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, View} from 'react-native';
 import {
   CodeField,
   Cursor,
@@ -15,15 +15,22 @@ import {Colors} from '../../utils/styles';
 import {CustomButton} from '../../components/Button/CustomButton';
 import {useTimer} from '../../hooks/useTimer';
 import {SHeader} from '../../components/Header/Header';
-import {ScreenEnum} from '../../utils/types';
+import {ScreenEnum, StackParamList} from '../../utils/types';
 import auth, {FirebaseAuthTypes, firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useDispatch} from 'react-redux';
 import {setUserData} from '../../redux/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from '../../i18n/i18n';
+import {ButtonWrapper} from '../../components/Button/ButtonWrapper';
+
+interface IProps {
+  route: RouteProp<StackParamList, ScreenEnum.SmsVerefication>;
+}
 
 const CELL_COUNT = 6;
-export const SmsVerification = ({route}) => {
+export const SmsVerification = ({route}: IProps) => {
+  const {t} = i18n;
   const dispatch = useDispatch();
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>(null);
@@ -61,10 +68,6 @@ export const SmsVerification = ({route}) => {
     }
   };
 
-  const resendCode = async () => {
-    startTimer();
-  };
-
   async function signInWithPhoneNumber(phoneNumber: string) {
     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
     setConfirm(confirmation);
@@ -86,6 +89,11 @@ export const SmsVerification = ({route}) => {
     signInWithPhoneNumber('+38' + phone);
   }, [phone]);
 
+  const handleResendCode = async () => {
+    startTimer();
+    await signInWithPhoneNumber('+38' + phone);
+  };
+
   return (
     <>
       <AppLayout>
@@ -94,7 +102,7 @@ export const SmsVerification = ({route}) => {
             <SHeader rightAction={() => goBack()} />
             <SView style={styles.header}>
               <Typography variant="p1SemiBold" textAlign="center">
-                Введіть код з SMS
+                {t('register.enterCode')}
               </Typography>
             </SView>
             <SView style={styles.form}>
@@ -138,23 +146,27 @@ export const SmsVerification = ({route}) => {
                   </View>
                 )}
               />
-              <TouchableOpacity
-                style={styles.resendCode}
-                onPress={resendCode}
-                disabled={second > 0}>
+              {second > 0 ? (
                 <Typography
-                  color={second > 0 ? Colors.BLACK : Colors.PRIMARY}
+                  color={Colors.BLACK}
                   variant="p1"
                   textAlign="center">
-                  {second > 0
-                    ? `Якщо код не прийшов відправте повторно через ${second} сукенд`
-                    : 'Відправити повторно'}
+                  {t('register.resendCode', {seconds: second})}
                 </Typography>
-              </TouchableOpacity>
+              ) : (
+                <ButtonWrapper onPress={handleResendCode}>
+                  <Typography
+                    color={Colors.PRIMARY}
+                    variant="p1"
+                    textAlign="center">
+                    {t('register.resendCodeBtn')}
+                  </Typography>
+                </ButtonWrapper>
+              )}
             </SView>
             <CustomButton
               disabled={code.length !== 6}
-              text={'Продовжити'}
+              text={t('base.continue')}
               onPress={confirmCode}
               background={Colors.PRIMARY_BUTTON}
             />

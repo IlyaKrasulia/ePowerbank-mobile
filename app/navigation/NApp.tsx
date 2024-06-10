@@ -8,12 +8,16 @@ import {firebase} from '@react-native-firebase/auth';
 import {setUserData} from '../redux/authSlice';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import useStorage from '../hooks/useStorage';
+import i18n from '../i18n/i18n';
 
 export const NApp = () => {
   const dispatch = useDispatch();
+  const {changeLanguage} = i18n;
 
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const [language, setLanguage] = useStorage('language');
 
   function onAuthStateChanged(userD: any) {
     setUser(userD);
@@ -23,12 +27,17 @@ export const NApp = () => {
       .onSnapshot(documentSnapshot => {
         if (documentSnapshot.exists) {
           dispatch(setUserData(documentSnapshot.data()));
+          setUser(userD);
         }
       });
     if (initializing) {
       setInitializing(false);
     }
   }
+
+  useEffect(() => {
+    changeLanguage(language);
+  }, [changeLanguage, language, setLanguage]);
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);

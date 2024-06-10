@@ -7,8 +7,11 @@ import {BackButton} from '../components/Base/BackButton';
 import {ButtonWrapper} from '../components/Button/ButtonWrapper';
 import {CheckIcon, MastercardIcon, PlusIcon} from '../assets/images/base';
 import {Typography} from '../components/Base/Typography';
+import i18n from '../i18n/i18n';
 
 export const PaymentCards = () => {
+  const {t} = i18n;
+
   return (
     <AppLayout>
       <View style={styles.wrapper}>
@@ -23,7 +26,7 @@ export const PaymentCards = () => {
           textAlign="center"
           marginTop={20}
           marginBottom={30}>
-          Гаманець
+          {t('balance.wallet')}
         </Typography>
         <ButtonWrapper onPress={() => {}}>
           <View style={styles.linkWrapper}>

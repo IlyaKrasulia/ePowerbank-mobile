@@ -9,8 +9,10 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenEnum} from '../../utils/types';
 import {Formik} from 'formik';
 import {firebase} from '@react-native-firebase/auth';
+import i18n from '../../i18n/i18n';
 
 export const AddAdditionalInfo = () => {
+  const {t} = i18n;
   const {navigate} = useNavigation();
 
   return (
@@ -44,20 +46,20 @@ export const AddAdditionalInfo = () => {
                 variant="p1SemiBold"
                 textAlign="center"
                 marginBottom={24}>
-                Давайте познайомимось ближче
+                {t('register.header2')}
               </Typography>
               <SView gap={10}>
                 <BaseInput
                   defaultValue={values.lastname}
                   onChange={handleChange('lastname')}
                   onBlur={handleBlur('lastname')}
-                  placeholder="Прізвище"
+                  placeholder={t('register.lastname')}
                 />
                 <BaseInput
                   defaultValue={values.name}
                   onChange={handleChange('name')}
                   onBlur={handleBlur('name')}
-                  placeholder="Ім'я"
+                  placeholder={t('register.name')}
                 />
                 <BaseInput
                   defaultValue={values.email}
@@ -99,7 +101,7 @@ export const AddAdditionalInfo = () => {
             <SView marginRight={15} marginLeft={15} marginBottom={10}>
               <CustomButton
                 onPress={handleSubmit}
-                text="Продовжити"
+                text={t('base.continue')}
                 background={Colors.PRIMARY_BUTTON}
               />
             </SView>

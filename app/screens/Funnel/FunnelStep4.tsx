@@ -1,15 +1,18 @@
 import React from 'react';
 import {FunnelTemplate} from '../../components/Funnel/FunnelTemplate';
 import {ScreenEnum} from '../../utils/types';
+import i18n from '../../i18n/i18n';
 
 export const FunnelStep4 = () => {
+  const {t} = i18n;
+
   return (
     <FunnelTemplate
       icon={require('../../assets/images/emoji/emoji_3.png')}
       index={4}
       nextScreen={ScreenEnum.CreateProfile}
-      title="Ми підтримуємо наших героїв"
-      text="Повербанк підтримує наших захисників! Долучайтесь до програми підтримки Збройних Сил України з кожним придбаним пристроєм. Ваш вибір - ваш внесок у безпеку та захист нашої країни."
+      title={t('funnel.step4.title')}
+      text={t('funnel.step4.info')}
     />
   );
 };

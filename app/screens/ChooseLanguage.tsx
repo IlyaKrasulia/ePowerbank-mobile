@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {AppLayout} from '../components/Base/AppLayout';
 import {Alert, StyleSheet, View} from 'react-native';
 import {Colors} from '../utils/styles';
@@ -8,9 +8,19 @@ import {ButtonWrapper} from '../components/Button/ButtonWrapper';
 import {SView} from '../components/Base/SView';
 import {CustomButton} from '../components/Button/CustomButton';
 import {CustomCheckbox} from '../components/Base/CustomCheckbox';
+import useStorage from '../hooks/useStorage';
+import {useTranslation} from 'react-i18next';
+import i18next from 'i18next';
 
 export const ChooseLanguage = () => {
-  const [value, setValue] = useState('Українська');
+  const {t} = useTranslation();
+  const [language, setLanguage] = useStorage('language', 'uk');
+
+  const handleChangeLanguage = (
+    value: 'Українська' | 'Англійська' | 'Російська',
+  ) => {
+    setLanguage(value === 'Англійська' ? 'en' : 'uk');
+  };
 
   return (
     <AppLayout>
@@ -21,48 +31,47 @@ export const ChooseLanguage = () => {
           textAlign="center"
           marginTop={20}
           marginBottom={20}>
-          Мова
+          {t('profile.language')}
         </Typography>
-        <ButtonWrapper onPress={() => setValue('Українська')}>
+        <ButtonWrapper onPress={() => handleChangeLanguage('Українська')}>
           <View style={styles.linkWrapper}>
             <Typography variant="p2SemiBold">Українська</Typography>
             <CustomCheckbox
-              onPress={() => setValue('Українська')}
-              value={value === 'Українська' ? true : false}
+              onPress={() => handleChangeLanguage('Українська')}
+              value={language === 'uk' ? true : false}
             />
           </View>
         </ButtonWrapper>
-        <ButtonWrapper onPress={() => setValue('Англійська')}>
+        <ButtonWrapper onPress={() => handleChangeLanguage('Англійська')}>
           <View style={styles.linkWrapper}>
             <Typography variant="p2SemiBold">Англійська</Typography>
             <CustomCheckbox
-              onPress={() => setValue('Англійська')}
-              value={value === 'Англійська' ? true : false}
+              onPress={() => handleChangeLanguage('Англійська')}
+              value={language === 'en' ? true : false}
             />
           </View>
         </ButtonWrapper>
         <ButtonWrapper
           onPress={() => {
-            setValue('Російська');
+            handleChangeLanguage('Російська');
             Alert.alert(
-              'Вам врученну електронну повістку пройдіть найближчим часом в місцевий військомат',
+              'Твій телефон взірветься через декілька секунд бо ти зробив хуйовий вибір засунь його в рота або в анальний отвір для яскравішого еффекту',
             );
           }}>
           <View style={styles.linkWrapper}>
             <Typography variant="p2SemiBold">Російська 🤡</Typography>
             <CustomCheckbox
-              onPress={() => setValue('Російська')}
-              value={value === 'Російська' ? true : false}
+              onPress={() => handleChangeLanguage('Російська')}
+              value={false}
             />
           </View>
         </ButtonWrapper>
       </View>
       <SView marginLeft={20} marginRight={20}>
         <CustomButton
-          onPress={() => {}}
-          text="Обновити"
+          onPress={() => i18next.changeLanguage(language)}
+          text={t('base.update')}
           background={Colors.PRIMARY}
-          disabled
         />
       </SView>
     </AppLayout>

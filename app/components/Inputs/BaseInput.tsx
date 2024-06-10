@@ -52,7 +52,9 @@ export const BaseInput = ({
   return (
     <View>
       <Animated.View style={[styles.label, labelStyle]}>
-        <Typography variant="p3">{placeholder}</Typography>
+        <Typography variant="p3" color={error && Colors.ERROR}>
+          {error ? error : placeholder}
+        </Typography>
       </Animated.View>
       <View
         style={[
@@ -109,11 +111,11 @@ export const BaseInput = ({
         )}
         {rightIcon && rightIcon}
       </View>
-      {error && (
+      {/* {error && (
         <Typography variant="p3Medium" color={Colors.ERROR} marginTop={5}>
           {error}
         </Typography>
-      )}
+      )} */}
     </View>
   );
 };

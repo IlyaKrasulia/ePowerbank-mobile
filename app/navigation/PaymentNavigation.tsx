@@ -4,6 +4,7 @@ import {ScreenEnum, StackParamList} from '../utils/types';
 import {Balance} from '../screens/Balance';
 import {PaymentCards} from '../screens/PaymentCards';
 import {Promocode} from '../screens/Promocode';
+import {LiqpayCheckout} from '../screens/LiqpayCheckout';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -19,6 +20,10 @@ export const PaymentNavigation = () => {
       />
       <Stack.Screen name={ScreenEnum.PaymentCards} component={PaymentCards} />
       <Stack.Screen name={ScreenEnum.Promocode} component={Promocode} />
+      <Stack.Screen
+        name={ScreenEnum.LiqpayCheckout}
+        component={LiqpayCheckout}
+      />
     </Stack.Navigator>
   );
 };

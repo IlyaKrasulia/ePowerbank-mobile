@@ -1,5 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import {PowerbankType} from './types';
+import {firebase} from '@react-native-firebase/auth';
 
 export const updateDeviceStatus = async (
   stationDocId: string,
@@ -39,6 +40,12 @@ export const updateDeviceStatus = async (
         });
         redirect && redirect();
       } else if (type === 'endRent') {
+        let history;
+        userRef.get().then(data => {
+          history = data;
+        });
+        console.log(history);
+
         userRef.update({
           activRent: {},
         });
@@ -50,3 +57,7 @@ export const updateDeviceStatus = async (
     console.error('Error updating device status: ', error);
   }
 };
+
+export const userRef = firestore()
+  .collection('Users')
+  .doc(firebase.auth().currentUser?.uid);

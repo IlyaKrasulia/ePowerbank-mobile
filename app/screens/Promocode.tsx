@@ -7,8 +7,11 @@ import {Typography} from '../components/Base/Typography';
 import {BaseInput} from '../components/Inputs/BaseInput';
 import {CustomButton} from '../components/Button/CustomButton';
 import {KeyboardAvoidingLayout} from '../components/Base/KeyboardAvoidingLayout';
+import i18n from '../i18n/i18n';
 
 export const Promocode = () => {
+  const {t} = i18n;
+
   return (
     <AppLayout>
       <KeyboardAvoidingLayout keyboardVerticalOffset={70}>
@@ -16,26 +19,25 @@ export const Promocode = () => {
           <View style={styles.wrapper}>
             <BackButton />
             <Typography variant="h3" textAlign="center" marginTop={20}>
-              Промокод
+              {t('balance.promo')}
             </Typography>
             <Typography
               variant="p4SemiBold"
               textAlign="center"
               marginTop={20}
               marginBottom={30}>
-              Введіть промокод, отриманий від друга, або будь-який інший
-              промокод
+              {t('balance.promoInfo')}
             </Typography>
             <BaseInput
               defaultValue=""
               onChange={() => {}}
-              placeholder="Введіть свій промокод"
+              placeholder={t('balance.enterPromo')}
             />
           </View>
           <View style={{marginHorizontal: 20}}>
             <CustomButton
               onPress={() => {}}
-              text="Надіслати"
+              text={t('base.send')}
               background={Colors.PRIMARY}
               disabled
             />

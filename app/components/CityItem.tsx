@@ -27,7 +27,7 @@ export const CityItem = ({
   return (
     <Pressable onPress={handlePress}>
       <SView flexDirection="row" alignItems="center" gap={10} marginBottom={25}>
-        <Pressable style={styles.circle}>
+        <Pressable onPress={handlePress} style={styles.circle}>
           {state === title && <View style={styles.checked} />}
         </Pressable>
         <Typography variant="h4Bold" opacity={!support ? 0.6 : 1}>

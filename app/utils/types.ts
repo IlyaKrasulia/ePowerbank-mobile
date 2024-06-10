@@ -8,7 +8,7 @@ export type StackParamList = {
   CreateProfile: undefined;
   SmsVerefication: {phone: string};
   AddAdditionalInfo: undefined;
-  ChooseCity: undefined;
+  ChooseCity: {userData: any};
   Home: undefined;
   Balance: undefined;
   PaymentCards: undefined;
@@ -18,6 +18,15 @@ export type StackParamList = {
   CreateStation: undefined;
   ScanQr: undefined;
   UsageManual: {deviceId: number | undefined; stationId: string};
+  SupportStack: undefined;
+  Support: undefined;
+  SupportSection: {
+    data: SupportSectionType;
+  };
+  LiqpayCheckout: undefined;
+  History: undefined;
+  ProfileStack: undefined;
+  PaymentStack: undefined;
 };
 
 export enum ScreenEnum {
@@ -38,6 +47,13 @@ export enum ScreenEnum {
   CreateStation = 'CreateStation',
   ScanQr = 'ScanQr',
   UsageManual = 'UsageManual',
+  SupportStack = 'SupportStack',
+  Support = 'Support',
+  SupportSection = 'SupportSection',
+  LiqpayCheckout = 'LiqpayCheckout',
+  History = 'History',
+  ProfileStack = 'ProfileStack',
+  PaymentStack = 'PaymentStack',
 }
 
 export type cityType = {
@@ -45,6 +61,17 @@ export type cityType = {
   label: string;
   support: boolean;
   occupied: boolean;
+};
+
+export type historyType = {
+  amount: number;
+  date: string;
+  time: {
+    hours: number;
+    minutes: number;
+    seconds: number;
+    string: string;
+  };
 };
 
 export type userType = {
@@ -55,6 +82,7 @@ export type userType = {
   city: string;
   birthday: string;
   uid: string;
+  balance: number;
   activRent: null | {
     capacity: number;
     charge: number;
@@ -63,6 +91,7 @@ export type userType = {
     timestamp: FirebaseFirestoreTypes.Timestamp;
     stationDocId: string;
   };
+  history: null | historyType[];
 };
 
 export interface StationType {
@@ -102,3 +131,11 @@ export interface PowerbankStation {
   price30m: string;
   totalPowerbanks: number;
 }
+
+export type SupportSectionType = {
+  title: string;
+  sections: {
+    title: string;
+    info: string[];
+  }[];
+};

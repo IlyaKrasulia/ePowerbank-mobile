@@ -13,15 +13,16 @@ import {
 import {ButtonWrapper} from './Button/ButtonWrapper';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenEnum} from '../utils/types';
+import i18n from '../i18n/i18n';
 
 interface NavItemProps {
   text: string;
   icon?: ReactNode;
-  balance?: number;
+  balance?: string;
   navigateTo: any;
 }
 
-const NavItem = ({text, icon, balance, navigateTo}: NavItemProps) => {
+const NavItem = ({text, icon, navigateTo}: NavItemProps) => {
   const {navigate} = useNavigation();
 
   return (
@@ -36,17 +37,14 @@ const NavItem = ({text, icon, balance, navigateTo}: NavItemProps) => {
             {text}
           </Typography>
         </SView>
-        {balance && (
-          <Typography variant="p1SemiBold" color={Colors.WHITE}>
-            {balance} ₴
-          </Typography>
-        )}
       </SView>
     </ButtonWrapper>
   );
 };
 
 export const CustomDrawer = () => {
+  const {t} = i18n;
+
   return (
     <SafeAreaView style={{backgroundColor: Colors.PRIMARY, flex: 1}}>
       <SView
@@ -65,27 +63,28 @@ export const CustomDrawer = () => {
               LOGO
             </Typography>
             <NavItem
-              balance={111}
               icon={<PaymentIcon width={20} height={20} />}
-              text="Платіжні карти"
-              navigateTo={ScreenEnum.Balance}
+              text={t('navigation.payments')}
+              navigateTo={ScreenEnum.PaymentStack}
             />
             <NavItem
               icon={<ClockIcon width={20} height={20} />}
-              text="Історія"
+              text={t('navigation.history')}
+              navigateTo={ScreenEnum.History}
             />
             <NavItem
               icon={<PhoneIcon width={20} height={20} />}
-              text="Допомога"
+              text={t('navigation.support')}
+              navigateTo={ScreenEnum.SupportStack}
             />
             <NavItem
               icon={<ProfileWhiteIcon width={20} height={20} />}
-              text="Профіль"
-              navigateTo={ScreenEnum.Profile}
+              text={t('navigation.profile')}
+              navigateTo={ScreenEnum.ProfileStack}
             />
             <NavItem
               icon={<SettingsIcon width={20} height={20} />}
-              text="Створити станцію"
+              text={t('navigation.createStation')}
               navigateTo={ScreenEnum.CreateStation}
             />
           </SView>

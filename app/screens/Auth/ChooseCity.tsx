@@ -13,8 +13,16 @@ import {setUserData} from '../../redux/authSlice';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {CityIcon} from '../../assets/images/base';
+import {RouteProp} from '@react-navigation/native';
+import {ScreenEnum, StackParamList} from '../../utils/types';
+import i18n from '../../i18n/i18n';
 
-export const ChooseCity = ({route}) => {
+interface IProps {
+  route: RouteProp<StackParamList, ScreenEnum.ChooseCity>;
+}
+
+export const ChooseCity = ({route}: IProps) => {
+  const {t} = i18n;
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
@@ -62,6 +70,7 @@ export const ChooseCity = ({route}) => {
       uid: firebase.auth().currentUser?.uid,
       emailVerificated: false,
       city: selectedValue,
+      balance: 0,
     };
     try {
       firestore()
@@ -80,7 +89,7 @@ export const ChooseCity = ({route}) => {
     <AppLayout>
       <SView marginLeft={15} marginRight={15} marginTop={10} flex={1}>
         <Typography variant="p2Bold" marginBottom={15} textAlign="center">
-          Виберіть своє місто
+          {t('register.chooseCity')}
         </Typography>
         <BaseInput
           defaultValue={value}
@@ -109,7 +118,7 @@ export const ChooseCity = ({route}) => {
       </SView>
       <View style={styles.buttonWrapper}>
         <CustomButton
-          text="Почати!"
+          text={t('register.start')}
           onPress={handleSubmit}
           background={Colors.PRIMARY_BUTTON}
         />

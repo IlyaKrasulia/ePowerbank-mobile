@@ -6,8 +6,7 @@ import {SView} from '../Base/SView';
 import {Typography} from '../Base/Typography';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
-import firestore from '@react-native-firebase/firestore';
-import {updateDeviceStatus} from '../../utils/firebaseHelper';
+import {updateDeviceStatus, userRef} from '../../utils/firebaseHelper';
 
 export const RentCard = () => {
   const data = useSelector((state: RootState) => state.auth.userData.activRent);
@@ -40,9 +39,15 @@ export const RentCard = () => {
     const seconds = Math.floor(elapsedTime / 1000) % 60;
     const minutes = Math.floor(elapsedTime / (1000 * 60)) % 60;
     const hours = Math.floor(elapsedTime / (1000 * 60 * 60)) % 24;
-    const days = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
 
-    return {days, hours, minutes, seconds};
+    return {
+      string: `${hours !== 0 ? (hours < 10 ? '0' + hours : hours + ':') : ''}${
+        minutes < 10 ? '0' + minutes : minutes
+      }:${seconds < 10 ? '0' + seconds : seconds}`,
+      seconds,
+      minutes,
+      hours,
+    };
   };
 
   const [elapsedTime, setElapsedTime] = useState(
@@ -57,22 +62,58 @@ export const RentCard = () => {
     return () => clearInterval(interval);
   }, [startDateObj]);
 
-  const handleEndRent = () => {
+  const handleEndRent = async () => {
     Alert.alert('Ви дійсно бажаєте завершити оренду повербанка?', undefined, [
       {
         text: 'Завершити',
-        onPress: () => {
-          updateDeviceStatus(
-            data ? data.stationDocId : '',
-            data ? data.id : -1,
-            'free',
-            userUid,
-            'endRent',
-          );
-          firestore()
-            .collection('Users')
-            .doc(userUid)
-            .update({activRent: null});
+        onPress: async () => {
+          try {
+            let arr: any = [];
+
+            updateDeviceStatus(
+              data ? data.stationDocId : '',
+              data ? data.id : -1,
+              'free',
+              userUid,
+              'endRent',
+            );
+
+            const getHistory = () => {
+              return new Promise((resolve, reject) => {
+                userRef.onSnapshot(documentSnapshot => {
+                  const history = documentSnapshot.data()?.history;
+                  if (history) {
+                    resolve(history);
+                  } else {
+                    reject('History not found');
+                  }
+                });
+              });
+            };
+
+            arr = await getHistory();
+
+            await userRef.update({
+              activRent: null,
+              history: [
+                ...arr,
+                {
+                  date: new Date().toString(),
+                  time: elapsedTime,
+                  amount:
+                    elapsedTime.minutes < 1
+                      ? 6
+                      : elapsedTime.hours >= 1
+                      ? elapsedTime.hours * 180
+                      : elapsedTime.minutes * 3,
+                },
+              ],
+            });
+
+            console.log('Update successful');
+          } catch (error) {
+            console.error('Error updating user data: ', error);
+          }
         },
         isPreferred: true,
       },
@@ -91,10 +132,7 @@ export const RentCard = () => {
             ID: {data?.id}
           </Typography>
           <Typography variant="h4Bold" marginTop={5} color={Colors.WHITE}>
-            {elapsedTime.hours > 1 && elapsedTime.hours + ':'}
-            {elapsedTime.minutes < 10 && 0}
-            {elapsedTime.minutes}:{elapsedTime.seconds < 10 && 0}
-            {elapsedTime.seconds}
+            {elapsedTime.string}
           </Typography>
         </View>
         <SView>

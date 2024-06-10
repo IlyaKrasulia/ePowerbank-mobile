@@ -8,8 +8,10 @@ import {KeyboardAvoidingLayout} from '../../components/Base/KeyboardAvoidingLayo
 import {SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ScreenEnum} from '../../utils/types';
+import i18n from '../../i18n/i18n';
 
 export const CreateProfile = () => {
+  const {t} = i18n;
   const [phone, setPhone] = useState('');
   const {navigate} = useNavigation();
 
@@ -18,14 +20,14 @@ export const CreateProfile = () => {
       <KeyboardAvoidingLayout>
         <SView flex={1} paddingBottom={10} justifyContent="space-between">
           <Typography variant="p1Medium" textAlign="center" marginTop={10}>
-            Введіть свій номер телефону
+            {t('register.header')}
           </Typography>
           <SView justifyContent="center" alignItems="center">
             <PhoneInput value={phone} onChangeText={setPhone} />
           </SView>
           <SView marginRight={15} marginLeft={15}>
             <CustomButton
-              text="Продовжити"
+              text={t('base.continue')}
               onPress={() => navigate(ScreenEnum.SmsVerefication, {phone})}
               background={Colors.PRIMARY_BUTTON}
             />

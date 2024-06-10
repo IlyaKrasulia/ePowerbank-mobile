@@ -7,6 +7,9 @@ import {Colors} from '../../utils/styles';
 import {useDispatch} from 'react-redux';
 import {signOut} from '../../redux/authSlice';
 import {firebase} from '@react-native-firebase/auth';
+import i18n from '../../i18n/i18n';
+import auth from '@react-native-firebase/auth';
+import {userRef} from '../../utils/firebaseHelper';
 
 interface IProps {
   state: boolean;
@@ -14,6 +17,7 @@ interface IProps {
 }
 
 export const ProfileModal = ({state, setState}: IProps) => {
+  const {t} = i18n;
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
@@ -38,17 +42,46 @@ export const ProfileModal = ({state, setState}: IProps) => {
     );
   };
 
+  const handleDeleteProfile = () => {
+    Alert.alert(
+      'Підтвердіть дію',
+      'Ви дійсно бажаєте видалити свій профіль без можливості подальшого відновлення?',
+      [
+        {text: 'Скасувати'},
+        {
+          text: 'Підтвердити',
+          onPress: () => {
+            let user = auth().currentUser;
+            if (user) {
+              userRef
+                .delete()
+                .then(() => {
+                  user &&
+                    user
+                      .delete()
+                      .then(() => console.log('User deleted'))
+                      .catch(error => console.log(error));
+                })
+                .then(() => dispatch(signOut()));
+            }
+          },
+          isPreferred: true,
+        },
+      ],
+    );
+  };
+
   return (
     <ModalWrapper isVisible={state} close={() => setState(false)}>
       <View style={styles.modalContainer}>
-        <ButtonWrapper onPress={handleSignOut}>
+        <ButtonWrapper onPress={handleDeleteProfile}>
           <Typography variant="p2Medium" color={Colors.ERROR}>
-            Видалити обліковий запис
+            {t('profile.deleteUser')}
           </Typography>
         </ButtonWrapper>
         <View style={styles.line}></View>
         <ButtonWrapper onPress={handleSignOut}>
-          <Typography variant="p2Medium">Вийти з додатку</Typography>
+          <Typography variant="p2Medium">{t('profile.signOut')}</Typography>
         </ButtonWrapper>
       </View>
     </ModalWrapper>

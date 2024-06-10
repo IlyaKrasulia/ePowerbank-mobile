@@ -17,6 +17,8 @@ const initialState: stateType = {
     name: 'unknown',
     uid: '',
     activRent: null,
+    history: null,
+    balance: 0,
   },
 };
 
@@ -38,6 +40,8 @@ export const authSlice = createSlice({
         name: 'unknown',
         uid: '',
         activRent: null,
+        history: null,
+        balance: 0,
       };
       state.auth = false;
     },

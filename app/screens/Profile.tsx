@@ -18,22 +18,17 @@ import {ScreenEnum} from '../utils/types';
 import {ProfileModal} from '../components/Profile/ProfileModal';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {profileValidation} from '../utils/validations';
+import useStorage from '../hooks/useStorage';
+import i18next from 'i18next';
 
 export const Profile = () => {
+  const {t} = i18next;
   const {navigate} = useNavigation();
   const {name, email} = useSelector((state: RootState) => state.auth.userData);
   const [modalOpened, setModalOpened] = useState(false);
+  const [language] = useStorage('language');
   const number = '+380662192962';
-
-  const formik = useFormik({
-    initialValues: {
-      name: name,
-      email: email,
-      phone: number,
-      language: 'Українська',
-    },
-    onSubmit: () => {},
-  });
 
   const updateInfo = () => {
     firestore()
@@ -44,6 +39,50 @@ export const Profile = () => {
         email: formik.values.email,
       });
   };
+
+  const formik = useFormik({
+    initialValues: {
+      name: name,
+      email: email,
+      phone: number,
+      language: 'Українська',
+    },
+    onSubmit: (values, {setSubmitting}) => {
+      // if (
+      //   JSON.stringify(values) ===
+      //   JSON.stringify({
+      //     name: name,
+      //     email: email,
+      //     phone: number,
+      //     language: 'Українська',
+      //   })
+      // ) {
+      //   setSubmitting(false);
+      //   return;
+      // }
+      try {
+        updateInfo();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    validationSchema: profileValidation,
+  });
+
+  const isFormUnchanged =
+    JSON.stringify(formik.values) === JSON.stringify(formik.initialValues);
+
+  console.log(
+    Boolean(
+      JSON.stringify(formik.values) ===
+        JSON.stringify({
+          name: name,
+          email: email,
+          phone: number,
+          language: 'Українська',
+        }),
+    ),
+  );
 
   return (
     <AppLayout>
@@ -64,26 +103,26 @@ export const Profile = () => {
               textAlign="center"
               marginTop={20}
               marginBottom={20}>
-              Профіль
+              {t('profile.title')}
             </Typography>
             <SView gap={20}>
               <BaseInput
                 defaultValue={formik.values.name}
                 onChange={text => formik.setFieldValue('name', text)}
-                label="Ім'я"
-                placeholder="Ім'я"
+                placeholder={t('profile.name')}
+                error={formik.touched.name ? formik.errors.name : ''}
               />
               <BaseInput
                 defaultValue={formik.values.email}
                 onChange={text => formik.setFieldValue('email', text)}
                 label="Email"
                 placeholder="Email"
+                error={formik.touched.email ? formik.errors.email : ''}
               />
               <BaseInput
                 defaultValue={formik.values.phone}
                 onChange={text => formik.setFieldValue('phone', text)}
-                label="Телефон"
-                placeholder="Телефон"
+                placeholder={t('profile.phone')}
                 type="phone"
                 rightIcon={<FlagUAIcon width={25} height={25} />}
                 disabled
@@ -91,10 +130,9 @@ export const Profile = () => {
               <ButtonWrapper
                 onPress={() => navigate(ScreenEnum.ChooseLanguage)}>
                 <BaseInput
-                  defaultValue={formik.values.language}
+                  defaultValue={language === 'uk' ? 'Українська' : 'English'}
                   onChange={text => formik.setFieldValue('language', text)}
-                  label="Мова"
-                  placeholder="Мова"
+                  placeholder={t('profile.language')}
                   disabled
                   rightIcon={
                     <BackIcon
@@ -107,11 +145,15 @@ export const Profile = () => {
               </ButtonWrapper>
             </SView>
           </View>
-          <SView marginLeft={20} marginRight={20}>
+          <SView
+            marginLeft={20}
+            marginRight={20}
+            style={{backgroundColor: Colors.BG, paddingTop: 10}}>
             <CustomButton
-              onPress={updateInfo}
-              text="Обновити"
+              onPress={formik.handleSubmit}
+              text={t('base.update')}
               background={Colors.PRIMARY}
+              disabled={isFormUnchanged || formik.isValid}
             />
           </SView>
           <ProfileModal state={modalOpened} setState={setModalOpened} />
